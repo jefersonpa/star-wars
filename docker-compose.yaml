@@ -1,0 +1,57 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_DATABASE: laravel_star_wars
+      DB_USERNAME: user
+      DB_PASSWORD: password
+    depends_on:
+      - db
+    command: >
+      sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0"
+    networks:
+      - app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - backend
+    networks:
+      - app
+  db:
+    image: mysql:5.7.22
+    ports:
+      - 8889:3306
+    environment:
+      MYSQL_DATABASE: laravel_star_wars
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app
+
+volumes:
+  node_modules: {}
+  db_data: {}
+networks:
+  app:
+    driver: bridge
