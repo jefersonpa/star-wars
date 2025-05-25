@@ -75,4 +75,32 @@ class StarWarsService
         ]);
         return null;
     }
+    
+    public function searchMovies(string $title): ?array
+    {
+        $response = $this->request('films/', ['title' => $title]);
+
+        if ($response->successful()) {
+            $data = $response->json();
+
+            if (isset($data['result']) && is_array($data['result']) && !empty($data['result'])) {
+                $desiredArray = array_map(function($item) {
+                    return [
+                        'title' => $item['properties']['title'],
+                        'uid' => $item['uid']
+                    ];
+                }, $data['result']);
+                return $desiredArray;
+            }
+
+            return [];
+        }
+
+        \Log::error("SWAPI.tech: Failed to search movies", [
+            'status' => $response->status(),
+            'response' => $response->body(),
+            'search_term' => $title
+        ]);
+        return null;
+    }
 }

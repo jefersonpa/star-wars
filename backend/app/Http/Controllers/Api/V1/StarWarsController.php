@@ -186,4 +186,61 @@ class StarWarsController extends Controller
 
         return response()->json($results);
     }
+    
+    /**
+     * @OA\Get(
+     *   path="/star-wars/movies",
+     *   @OA\Parameter(
+     *      name="title",
+     *      in="query",
+     *      required=true,
+     *      description="Title of the movie to search for (e.g., 'A New Hope')",
+     *   ),
+     *  @OA\Response(
+     *         response="200",
+     *         description="ok",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                    type="array",
+     *                         @OA\Items(
+     *                              type="object",
+     *                              @OA\Property(
+     *                                  property="title",
+     *                                  type="string",
+     *                                  example="A New Hope"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="uid",
+     *                                  type="string",
+     *                                  example="1"
+     *                              ),
+     *                     ),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     * )
+     */
+    public function searchMovies(Request $request): JsonResponse
+    {
+        $searchTerm = $request->query('title');
+
+        if (empty($searchTerm)) {
+            return response()->json([
+                'message' => 'Please provide a "title" query parameter for the search (e.g., ?title=A New Hope).',
+            ], 400);
+        }
+
+        $results = $this->starWarsService->searchMovies($searchTerm);
+
+        if (is_null($results)) {
+            return response()->json([
+                'message' => 'Could not retrieve movies from Star Wars API.',
+            ], 500);
+        }
+
+        return response()->json($results);
+    }
 }

@@ -17,6 +17,14 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    getStarWarsMovies: build.query<GetStarWarsMoviesApiResponse, GetStarWarsMoviesApiArg>({
+      query: (queryArg) => ({
+        url: `/star-wars/movies`,
+        params: {
+          title: queryArg.title,
+        },
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -46,9 +54,19 @@ export type GetStarWarsPersonApiArg = {
   /** Get one person by uid (e.g., '1') */
   uid: any;
 };
+export type GetStarWarsMoviesApiResponse = /** status 200 ok */ {
+  title?: string;
+  uid?: string;
+}[];
+export type GetStarWarsMoviesApiArg = {
+  /** Title of the movie to search for (e.g., 'A New Hope') */
+  title: any;
+};
 export const {
   useGetStarWarsPeopleQuery,
   useLazyGetStarWarsPeopleQuery,
   useGetStarWarsPersonQuery,
   useLazyGetStarWarsPersonQuery,
+  useGetStarWarsMoviesQuery,
+  useLazyGetStarWarsMoviesQuery,
 } = injectedRtkApi;
