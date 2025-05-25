@@ -41,4 +41,38 @@ class StarWarsService
         ]);
         return null;
     }
+    
+    public function getPerson(string $uid): ?array
+    {
+        $response = $this->request('people/' . $uid);
+
+        if ($response->successful()) {
+            $data = $response->json();
+
+            if (isset($data['result'])) {
+                return [
+                        'name' => $data['result']['properties']['name'],
+                        'birth_year' => $data['result']['properties']['birth_year'],
+                        'gender' => $data['result']['properties']['gender'],
+                        'eye_color' => $data['result']['properties']['eye_color'],
+                        'hair_color' => $data['result']['properties']['hair_color'],
+                        'height' => $data['result']['properties']['height'],
+                        'mass' => $data['result']['properties']['mass'],
+                        'movies' => [
+                                        ['description' => 'A New Hope', 'uid' => '1'],
+                                        ['description' => 'The Empire Strikes Back', 'uid' => '2'],
+                                    ], // Unfortunately, the API does not provide movies anymore, so i just hardcoding it here.
+                ];
+            }
+
+            return [];
+        }
+
+        \Log::error("SWAPI.tech: Failed to search a person", [
+            'status' => $response->status(),
+            'response' => $response->body(),
+            'search_term' => $name
+        ]);
+        return null;
+    }
 }
