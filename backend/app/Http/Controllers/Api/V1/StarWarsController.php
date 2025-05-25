@@ -33,21 +33,40 @@ class StarWarsController extends Controller
     {
         $this->starWarsService = $starWarsService;
     }
-
     /**
      * @OA\Get(
-     * path="/star-wars/people",
-     * @OA\Parameter(
-     * name="name",
-     * in="query",
-     * required=true,
-     * description="Name of the person to search for (e.g., 'luke')",
-     * @OA\Schema(type="string")
-     * ),
-     * @OA\Response(
-     * response=200,
-     * description="Successful response",
-     * ),
+     *   path="/star-wars/people",
+     *   @OA\Parameter(
+     *      name="name",
+     *      in="query",
+     *      required=true,
+     *      description="Name of the person to search for (e.g., 'luke')",
+     *   ),
+     *  @OA\Response(
+     *         response="200",
+     *         description="ok",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                    type="array",
+     *                         @OA\Items(
+     *                              type="object",
+     *                              @OA\Property(
+     *                                  property="name",
+     *                                  type="string",
+     *                                  example="Luke Skywalker"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="uid",
+     *                                  type="string",
+     *                                  example="1"
+     *                              ),
+     *                     ),
+     *                 )
+     *             )
+     *         }
+     *     ),
      * )
      */
     public function searchPeople(Request $request): JsonResponse
@@ -68,9 +87,6 @@ class StarWarsController extends Controller
             ], 500);
         }
 
-        return response()->json([
-            'message' => 'People search successful.',
-            'data' => $results
-        ]);
+        return response()->json($results);
     }
 }
