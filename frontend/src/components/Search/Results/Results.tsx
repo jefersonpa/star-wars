@@ -1,15 +1,29 @@
+import { useDispatch } from 'react-redux';
 import { useGetStarWarsPeopleQuery } from '../../../services/generatedCodeApi';
 import { useTypedSelector } from '../../../store/store';
 import './style.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { setDetailsBy } from '../../../store/sharedSlice';
 const Results = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const searchTerm = useTypedSelector((store) => store.sharedReducer.searchTerm);
+  const searchBy = useTypedSelector((store) => store.sharedReducer.searchBy);
   const { data, isFetching } = useGetStarWarsPeopleQuery(
     { name: searchTerm },
     {
       skip: searchTerm === '',
     },
   );
+
+  const handleClick = (uid: string | undefined) => {
+    if (!uid) {
+      return;
+    }
+    dispatch(setDetailsBy(searchBy));
+    navigate('/details/' + uid);
+  };
+
   return (
     <div className="results__container">
       <span className="results__title">Results</span>
@@ -20,11 +34,9 @@ const Results = () => {
           <div key={item.uid} className="results__item">
             <div className="results__item-container">
               <span className="results__item-name">{item.name}</span>
-              <Link to={`/details/${item.uid}`}>
-                <button className={'results__item-see-details-button'}>
-                  <span className="results__item-see-details-button-text">SEE DETAILS</span>
-                </button>
-              </Link>
+              <button className={'results__item-see-details-button'} onClick={() => handleClick(item.uid)}>
+                <span className="results__item-see-details-button-text">SEE DETAILS</span>
+              </button>
             </div>
             <div className="results__item-divider"></div>
           </div>

@@ -6,6 +6,7 @@ const sharedSlice = createSlice({
   initialState: {
     searchTerm: '',
     searchBy: searchByOptions.people,
+    detailsBy: searchByOptions.people,
   },
   reducers: {
     setSearchTerm: (state, action) => {
@@ -14,10 +15,13 @@ const sharedSlice = createSlice({
     setSearchBy: (state, action) => {
       state.searchBy = action.payload;
     },
+    setDetailsBy: (state, action) => {
+      state.detailsBy = action.payload;
+    },
   },
 });
 
 const sharedReducer = sharedSlice.reducer;
 
-export const { setSearchTerm, setSearchBy } = sharedSlice.actions;
+export const { setSearchTerm, setSearchBy, setDetailsBy } = sharedSlice.actions;
 export default sharedReducer;

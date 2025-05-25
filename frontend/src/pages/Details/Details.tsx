@@ -2,17 +2,17 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 import { useGetStarWarsPersonQuery } from '../../services/generatedCodeApi';
 import { useTypedSelector } from '../../store/store';
-import { searchByOptions, setSearchBy, setSearchTerm } from '../../store/sharedSlice';
+import { searchByOptions, setDetailsBy, setSearchBy, setSearchTerm } from '../../store/sharedSlice';
 import { useDispatch } from 'react-redux';
-import Search from '../Search/Search';
+
 const Details = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const searchBy = useTypedSelector((store) => store.sharedReducer.searchBy);
+  const detailsBy = useTypedSelector((store) => store.sharedReducer.detailsBy);
 
-  const isPeopleSearch = searchBy === searchByOptions.people;
+  const isPeopleDetails = detailsBy === searchByOptions.people;
 
   const personDetails = {
     birth_year: '24BBY',
@@ -38,8 +38,6 @@ const Details = () => {
       skip: id === '',
     },
   );
-  console.log('data', data);
-  console.log('isFetching', isFetching);
 
   const PersonDetails = () => {
     if (!data || isFetching) {
@@ -78,8 +76,7 @@ const Details = () => {
     if (!uid) {
       return;
     }
-    dispatch(setSearchBy(isPeopleSearch ? searchByOptions.movies : searchByOptions.people));
-    dispatch(setSearchTerm(''));
+    dispatch(setDetailsBy(isPeopleDetails ? searchByOptions.movies : searchByOptions.people));
     navigate('/details/' + uid);
   };
   return (
@@ -87,15 +84,15 @@ const Details = () => {
       <span className="details__title">{!data || isFetching ? 'Loading...' : data?.name}</span>
       <div className="details__content">
         <div className="details__box">
-          <span className="details__subtitle">{isPeopleSearch ? 'Details' : 'Opening Crawl'}</span>
+          <span className="details__subtitle">{isPeopleDetails ? 'Details' : 'Opening Crawl'}</span>
           <span className="details__divider"></span>
-          <span className="details__description">{isPeopleSearch ? PersonDetails() : MovieDetails()}</span>
+          <span className="details__description">{isPeopleDetails ? PersonDetails() : MovieDetails()}</span>
         </div>
         <div className="details__box">
-          <span className="details__subtitle">{isPeopleSearch ? 'Movies' : 'Characters'}</span>
+          <span className="details__subtitle">{isPeopleDetails ? 'Movies' : 'Characters'}</span>
           <span className="details__divider"></span>
           <span className="details__character">
-            {isPeopleSearch ? (
+            {isPeopleDetails ? (
               data?.movies?.map((movie, index) => (
                 <span key={movie.uid}>
                   <span className="details__character-link" onClick={() => handleClick(movie.uid)}>
