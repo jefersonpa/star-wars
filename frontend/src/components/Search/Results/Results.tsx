@@ -1,12 +1,10 @@
-import { useDispatch } from 'react-redux';
 import { useGetStarWarsMoviesQuery, useGetStarWarsPeopleQuery } from '../../../services/generatedCodeApi';
 import { useTypedSelector } from '../../../store/store';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
-import { searchByOptions, setDetailsBy } from '../../../store/sharedSlice';
+import { searchByOptions } from '../../../store/sharedSlice';
 
 const Results = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const searchTerm = useTypedSelector((store) => store.sharedReducer.searchTerm);
   const searchBy = useTypedSelector((store) => store.sharedReducer.searchBy);
@@ -27,8 +25,7 @@ const Results = () => {
     if (!uid) {
       return;
     }
-    dispatch(setDetailsBy(searchBy));
-    navigate('/details/' + uid);
+    navigate(`/details/${searchBy}/${uid}`);
   };
 
   const renderPeopleResults = () => {

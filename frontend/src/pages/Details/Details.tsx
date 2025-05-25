@@ -1,16 +1,13 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
-import { useGetStarWarsPersonQuery } from '../../services/generatedCodeApi';
-import { useTypedSelector } from '../../store/store';
-import { searchByOptions, setDetailsBy, setSearchBy, setSearchTerm } from '../../store/sharedSlice';
-import { useDispatch } from 'react-redux';
+import { useGetStarWarsMovieQuery, useGetStarWarsPersonQuery } from '../../services/generatedCodeApi';
+import { searchByOptions } from '../../store/sharedSlice';
 
 const Details = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const detailsBy = useTypedSelector((store) => store.sharedReducer.detailsBy);
+  const { detailsBy } = useParams<{ detailsBy: string }>();
 
   const isPeopleDetails = detailsBy === searchByOptions.people;
 
@@ -23,7 +20,7 @@ const Details = () => {
     mass: '84',
   };
 
-  const fieldLabels: Record<keyof typeof personDetails, string> = {
+  const personFieldLabels: Record<keyof typeof personDetails, string> = {
     birth_year: 'Birth Year',
     gender: 'Gender',
     eye_color: 'Eye Color',
@@ -32,22 +29,29 @@ const Details = () => {
     mass: 'Mass',
   };
 
-  const { data, isFetching } = useGetStarWarsPersonQuery(
+  const { data: personData, isFetching: personIsFetching } = useGetStarWarsPersonQuery(
     { uid: id },
     {
-      skip: id === '',
+      skip: id === '' || detailsBy !== searchByOptions.people,
+    },
+  );
+
+  const { data: movieData, isFetching: movieIsFetching } = useGetStarWarsMovieQuery(
+    { uid: id },
+    {
+      skip: id === '' || detailsBy !== searchByOptions.movies,
     },
   );
 
   const PersonDetails = () => {
-    if (!data || isFetching) {
+    if (!personData || personIsFetching) {
       return <></>;
     }
     return (
       <div>
-        {Object.entries(fieldLabels).map(([key, label]) => (
+        {Object.entries(personFieldLabels).map(([key, label]) => (
           <div key={key}>
-            {label}: {data[key as keyof typeof data] as string}
+            {label}: {personData[key as keyof typeof personData] as string}
           </div>
         ))}
       </div>
@@ -55,20 +59,13 @@ const Details = () => {
   };
 
   const MovieDetails = () => {
-    if (!data || isFetching) {
+    if (!movieData || movieIsFetching) {
       return <></>;
     }
     return (
-      <div>
-        Luke Skywalker has returned to his home planet of Tatooine in an attempt to rescue his friend Han Solo from the
-        clutches of the vile gangster Jabba the Hutt. <br />
-        <br />
-        Little does Luke know that the GALACTIC EMPIRE has secretly begun construction on a new armored space station
-        even more powerful than the first dreaded Death Star. <br />
-        <br />
-        When completed, this ultimate weapon will spell certain doom for the small band of rebels struggling to restore
-        freedom to the galaxy...
-      </div>
+      <>
+        <div className="details__multiple-characters">{movieData.opening_crawl}</div>
+      </>
     );
   };
 
@@ -76,12 +73,26 @@ const Details = () => {
     if (!uid) {
       return;
     }
-    dispatch(setDetailsBy(isPeopleDetails ? searchByOptions.movies : searchByOptions.people));
-    navigate('/details/' + uid);
+
+    navigate(`/details/${isPeopleDetails ? searchByOptions.movies : searchByOptions.people}/${uid}`);
   };
+
+  if ((isPeopleDetails && (!personData || personIsFetching)) || (!isPeopleDetails && (!movieData || movieIsFetching))) {
+    return (
+      <div className="details__container">
+        <span className="details__loading">Loading...</span>
+        <Link to="/">
+          <button className="details__back-to-search-button">
+            <span className="details__back-to-search-button-text">BACK TO SEARCH</span>
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="details__container">
-      <span className="details__title">{!data || isFetching ? 'Loading...' : data?.name}</span>
+      <span className="details__title">{isPeopleDetails ? personData?.name : movieData?.title}</span>
       <div className="details__content">
         <div className="details__box">
           <span className="details__subtitle">{isPeopleDetails ? 'Details' : 'Opening Crawl'}</span>
@@ -92,18 +103,23 @@ const Details = () => {
           <span className="details__subtitle">{isPeopleDetails ? 'Movies' : 'Characters'}</span>
           <span className="details__divider"></span>
           <span className="details__character">
-            {isPeopleDetails ? (
-              data?.movies?.map((movie, index) => (
-                <span key={movie.uid}>
-                  <span className="details__character-link" onClick={() => handleClick(movie.uid)}>
-                    {movie.description}
+            {isPeopleDetails
+              ? personData?.movies?.map((movie, index) => (
+                  <span key={movie.uid}>
+                    <span className="details__character-link" onClick={() => handleClick(movie.uid)}>
+                      {movie.description}
+                    </span>
+                    {personData?.movies && index < personData?.movies?.length - 1 && ', '}
                   </span>
-                  {data?.movies && index < data?.movies?.length - 1 && ', '}
-                </span>
-              ))
-            ) : (
-              <></>
-            )}
+                ))
+              : movieData?.characters?.map((character, index) => (
+                  <span key={character.uid}>
+                    <span className="details__character-link" onClick={() => handleClick(character.uid)}>
+                      {character.name}
+                    </span>
+                    {movieData?.characters && index < movieData?.characters?.length - 1 && ', '}
+                  </span>
+                ))}
           </span>
         </div>
       </div>

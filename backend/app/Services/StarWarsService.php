@@ -59,9 +59,10 @@ class StarWarsService
                         'height' => $data['result']['properties']['height'],
                         'mass' => $data['result']['properties']['mass'],
                         'movies' => [
-                                        ['description' => 'A New Hope', 'uid' => '1'],
-                                        ['description' => 'The Empire Strikes Back', 'uid' => '2'],
-                                    ], // Unfortunately, the API does not provide movies anymore, so i just hardcoding it here.
+                                        ['description' => 'Return of the Jedi', 'uid' => '3'],
+                                        ['description' => 'The Phantom Menace', 'uid' => '4'],
+                                        ['description' => 'This is just a Mock, the API no longer returns movies per person, characters per movie is working', 'uid' => '5'],
+                                    ], // Unfortunately, the API does not provide movies by people anymore, so i just hardcoding it here.
                 ];
             }
 
@@ -100,6 +101,54 @@ class StarWarsService
             'status' => $response->status(),
             'response' => $response->body(),
             'search_term' => $title
+        ]);
+        return null;
+    }
+    
+    public function getMovie(string $uid): ?array
+    {
+        $response = $this->request('films/' . $uid);
+
+        if ($response->successful()) {
+            $data = $response->json();
+
+            if (isset($data['result'])) {
+                $characters = $data['result']['properties']['characters'];
+
+                $charactersObject = [];
+
+                $responses = Http::pool(fn ($pool) =>
+                    array_map(function ($url) use ($pool) {
+                        return $pool->get($url);
+                    }, $characters)
+                );
+
+                foreach ($responses as $index => $charactersResponse) {
+                    $uid = basename($characters[$index]);
+
+                    if ($charactersResponse->successful()) {
+                        $characterData = $charactersResponse->json('result.properties');
+                        $charactersObject[] = [
+                            'name' => $characterData['name'],
+                            'uid' => $uid,
+                        ];
+                    }
+                }
+
+                return [
+                        'title' => $data['result']['properties']['title'],
+                        'opening_crawl' => $data['result']['properties']['opening_crawl'],
+                        'characters' => $charactersObject,
+                ];
+            }
+
+            return [];
+        }
+
+        \Log::error("SWAPI.tech: Failed to search a person", [
+            'status' => $response->status(),
+            'response' => $response->body(),
+            'search_term' => $name
         ]);
         return null;
     }

@@ -165,6 +165,57 @@
                     }
                 }
             }
+        },
+        "/star-wars/movie": {
+            "get": {
+                "operationId": "164e6078d6997a3bcf434f06986597e2",
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "query",
+                        "description": "Get one movie by uid (e.g., '1')",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Return of the Jedi"
+                                        },
+                                        "opening_crawl": {
+                                            "type": "string",
+                                            "example": "Synopsis"
+                                        },
+                                        "characters": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Luke Skywalker"
+                                                    },
+                                                    "uid": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

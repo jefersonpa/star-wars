@@ -243,4 +243,75 @@ class StarWarsController extends Controller
 
         return response()->json($results);
     }
+
+    /**
+     * @OA\Get(
+     *   path="/star-wars/movie",
+     *   @OA\Parameter(
+     *      name="uid",
+     *      in="query",
+     *      required=true,
+     *      description="Get one movie by uid (e.g., '1')",
+     *   ),
+     *  @OA\Response(
+     *         response="200",
+     *         description="ok",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                              type="object",
+     *                              @OA\Property(
+     *                                  property="title",
+     *                                  type="string",
+     *                                  example="Return of the Jedi"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="opening_crawl",
+     *                                  type="string",
+     *                                  example="Synopsis"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="characters",
+     *                                  type="array",
+     *                                  @OA\Items(
+     *                                      type="object",
+     *                                      @OA\Property(
+     *                                          property="name",
+     *                                          type="string",
+     *                                          example="Luke Skywalker"
+     *                                      ),
+     *                                      @OA\Property(
+     *                                          property="uid",
+     *                                          type="string",
+     *                                          example="1"
+     *                                      ),
+     *                                  )
+     *                              )
+     *                 )
+     *             )
+     *         }
+     *     ),
+     * )
+     */
+    public function getMovie(Request $request): JsonResponse
+    {
+        $uid = $request->query('uid');
+
+        if (empty($uid)) {
+            return response()->json([
+                'message' => 'Invalid id',
+            ], 400);
+        }
+
+        $results = $this->starWarsService->getMovie($uid);
+
+        if (is_null($results)) {
+            return response()->json([
+                'message' => 'Could not retrieve a movie from Star Wars API.',
+            ], 500);
+        }
+
+        return response()->json($results);
+    }
 }
