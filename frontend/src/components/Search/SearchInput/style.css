@@ -99,13 +99,16 @@
 }
 
 .search-input__search-button {
+  cursor: pointer;
   width: 100%;
   height: 34px;
   border-radius: 20px;
-  border: solid 1px var(--pinkish-grey);
-  background-color: var(--pinkish-grey);
+  border: solid 1px var(--green-teal);
+  background-color: var(--green-teal);
 }
 
 .search-input__search-button-disabled {
+  cursor: unset;
+  border: solid 1px var(--pinkish-grey);
   background-color: var(--pinkish-grey);
 }
