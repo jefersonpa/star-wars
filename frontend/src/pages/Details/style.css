@@ -21,6 +21,32 @@
   color: #000;
 }
 
+.details__loading {
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000;
+  margin-bottom: 390px;
+  display: block;
+}
+
+.details__multiple-characters {
+  white-space: pre-line;
+  width: 220px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 17;
+  line-clamp: 17;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4em;
+  max-height: calc(1.4em * 17);
+}
+
 .details__subtitle {
   font-family: Montserrat;
   font-size: 16px;
