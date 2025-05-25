@@ -9,6 +9,14 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    getStarWarsPerson: build.query<GetStarWarsPersonApiResponse, GetStarWarsPersonApiArg>({
+      query: (queryArg) => ({
+        url: `/star-wars/person`,
+        params: {
+          uid: queryArg.uid,
+        },
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -21,4 +29,26 @@ export type GetStarWarsPeopleApiArg = {
   /** Name of the person to search for (e.g., 'luke') */
   name: any;
 };
-export const { useGetStarWarsPeopleQuery, useLazyGetStarWarsPeopleQuery } = injectedRtkApi;
+export type GetStarWarsPersonApiResponse = /** status 200 ok */ {
+  name?: string;
+  birth_year?: string;
+  gender?: string;
+  eye_color?: string;
+  hair_color?: string;
+  height?: string;
+  mass?: string;
+  movies?: {
+    description?: string;
+    uid?: string;
+  }[];
+};
+export type GetStarWarsPersonApiArg = {
+  /** Get one person by uid (e.g., '1') */
+  uid: any;
+};
+export const {
+  useGetStarWarsPeopleQuery,
+  useLazyGetStarWarsPeopleQuery,
+  useGetStarWarsPersonQuery,
+  useLazyGetStarWarsPersonQuery,
+} = injectedRtkApi;

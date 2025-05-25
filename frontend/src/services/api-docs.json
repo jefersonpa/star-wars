@@ -56,6 +56,77 @@
                     }
                 }
             }
+        },
+        "/star-wars/person": {
+            "get": {
+                "operationId": "1e35f1ffdc5e0f53592277721d8e6518",
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "query",
+                        "description": "Get one person by uid (e.g., '1')",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Luke Skywalker"
+                                        },
+                                        "birth_year": {
+                                            "type": "string",
+                                            "example": "19BBY"
+                                        },
+                                        "gender": {
+                                            "type": "string",
+                                            "example": "male"
+                                        },
+                                        "eye_color": {
+                                            "type": "string",
+                                            "example": "blue"
+                                        },
+                                        "hair_color": {
+                                            "type": "string",
+                                            "example": "blond"
+                                        },
+                                        "height": {
+                                            "type": "string",
+                                            "example": "172"
+                                        },
+                                        "mass": {
+                                            "type": "string",
+                                            "example": "77"
+                                        },
+                                        "movies": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "A New Hope"
+                                                    },
+                                                    "uid": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

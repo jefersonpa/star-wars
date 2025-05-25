@@ -89,4 +89,101 @@ class StarWarsController extends Controller
 
         return response()->json($results);
     }
+
+    
+    /**
+     * @OA\Get(
+     *   path="/star-wars/person",
+     *   @OA\Parameter(
+     *      name="uid",
+     *      in="query",
+     *      required=true,
+     *      description="Get one person by uid (e.g., '1')",
+     *   ),
+     *  @OA\Response(
+     *         response="200",
+     *         description="ok",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                              type="object",
+     *                              @OA\Property(
+     *                                  property="name",
+     *                                  type="string",
+     *                                  example="Luke Skywalker"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="birth_year",
+     *                                  type="string",
+     *                                  example="19BBY"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="gender",
+     *                                  type="string",
+     *                                  example="male"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="eye_color",
+     *                                  type="string",
+     *                                  example="blue"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="hair_color",
+     *                                  type="string",
+     *                                  example="blond"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="height",
+     *                                  type="string",
+     *                                  example="172"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="mass",
+     *                                  type="string",
+     *                                  example="77"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="movies",
+     *                                  type="array",
+     *                                  @OA\Items(
+     *                                      type="object",
+     *                                      @OA\Property(
+     *                                          property="description",
+     *                                          type="string",
+     *                                          example="A New Hope"
+     *                                      ),
+     *                                      @OA\Property(
+     *                                          property="uid",
+     *                                          type="string",
+     *                                          example="1"
+     *                                      ),
+     *                                  )
+     *                              )
+     *                 )
+     *             )
+     *         }
+     *     ),
+     * )
+     */
+    public function getPerson(Request $request): JsonResponse
+    {
+        $uid = $request->query('uid');
+
+        if (empty($uid)) {
+            return response()->json([
+                'message' => 'Invalid id',
+            ], 400);
+        }
+
+        $results = $this->starWarsService->getPerson($uid);
+
+        if (is_null($results)) {
+            return response()->json([
+                'message' => 'Could not retrieve a person from Star Wars API.',
+            ], 500);
+        }
+
+        return response()->json($results);
+    }
 }

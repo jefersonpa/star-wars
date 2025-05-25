@@ -10,4 +10,5 @@ Route::get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::get('star-wars/people', [StarWarsController::class, 'searchPeople']);
+    Route::get('star-wars/person', [StarWarsController::class, 'getPerson']);
 });
