@@ -127,6 +127,44 @@
                     }
                 }
             }
+        },
+        "/star-wars/movies": {
+            "get": {
+                "operationId": "6188c93c1585c6dcceacc977e51d3974",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Title of the movie to search for (e.g., 'A New Hope')",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "title": {
+                                                "type": "string",
+                                                "example": "A New Hope"
+                                            },
+                                            "uid": {
+                                                "type": "string",
+                                                "example": "1"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

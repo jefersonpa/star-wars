@@ -6,13 +6,13 @@ import { useGetStarWarsPeopleQuery } from '../../../services/generatedCodeApi';
 import { useState } from 'react';
 const SearchInput = () => {
   const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = useState('');
   const searchTerm = useTypedSelector((store) => store.sharedReducer.searchTerm);
   const searchBy = useTypedSelector((store) => store.sharedReducer.searchBy);
+  const [searchValue, setSearchValue] = useState(searchTerm);
   const { isFetching } = useGetStarWarsPeopleQuery(
     { name: searchTerm },
     {
-      skip: searchTerm === '',
+      skip: searchTerm === '' || searchBy !== searchByOptions.people,
     },
   );
 
@@ -40,7 +40,11 @@ const SearchInput = () => {
       <input
         type="search"
         className="search-input__input input-text"
-        placeholder="e.g. Chewbacca, Yoda, Boba Fett"
+        placeholder={
+          searchBy == searchByOptions.people
+            ? 'e.g. Chewbacca, Yoda, Boba Fett'
+            : 'e.g. A New Hope, The Empire Strikes Back'
+        }
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       ></input>

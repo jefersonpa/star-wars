@@ -47,7 +47,7 @@ const Details = () => {
       <div>
         {Object.entries(fieldLabels).map(([key, label]) => (
           <div key={key}>
-            {label}: {data[key as keyof typeof data]}
+            {label}: {data[key as keyof typeof data] as string}
           </div>
         ))}
       </div>
