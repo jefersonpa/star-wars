@@ -1,0 +1,13 @@
+body {
+  margin: 0px;
+  min-height: 100vh;
+  background-color: #ededed !important;
+  font-family: 'Montserrat', sans-serif;
+}
+:root {
+  --green-teal: #0ab463;
+  --emerald: #089954;
+  --link: #0094ff;
+  --grey: #383838;
+  --pinkish-grey: #c4c4c4;
+}

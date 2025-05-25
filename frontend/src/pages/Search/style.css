@@ -1,0 +1,4 @@
+.search__search-container {
+  display: flex;
+  gap: 30px;
+}

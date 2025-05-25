@@ -1,0 +1,111 @@
+.search-input__question-text {
+  width: 205px;
+  height: 18px;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--gray);
+}
+.search-input__container {
+  box-sizing: border-box;
+  padding: 30px;
+  width: 410px;
+  height: 230px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 var(--warm-grey-75);
+  border: solid 1px var(--pinkish-grey);
+  background-color: #fff;
+}
+.search-input__ellipse {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: solid 1px var(--pinkish-grey);
+  background-color: #fff;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.search-input__ellipse-selected {
+  background-color: var(--emerald);
+  border: unset;
+}
+.search-input__ellipse-selected::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: calc(50% - 2px);
+  left: calc(50% - 2px);
+}
+.search-input__people {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000;
+}
+
+.search-input__people-gap {
+  margin-right: 20px;
+}
+
+.search-input__search-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.search-input__input {
+  width: 100%;
+  height: 40px;
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px 0 var(--warm-grey-75);
+  border: solid 1px var(--pinkish-grey);
+  background-color: #fff;
+}
+
+.search-input__input-text {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--pinkish-grey);
+}
+
+.search-input__search-button-text {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #fff;
+}
+
+.search-input__search-button {
+  width: 100%;
+  height: 34px;
+  border-radius: 20px;
+  border: solid 1px var(--pinkish-grey);
+  background-color: var(--pinkish-grey);
+}
+
+.search-input__search-button-disabled {
+  background-color: var(--pinkish-grey);
+}
