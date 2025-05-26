@@ -21,9 +21,6 @@ class DatadogAnalyticsService
         }
     }
 
-    /**
-     * Helper function to make authenticated requests to the Datadog API.
-     */
     private function request(string $method, string $path, array $payload = [])
     {
         $request = Http::withHeaders([
@@ -37,55 +34,6 @@ class DatadogAnalyticsService
         }
 
         return $request->post($this->baseUrl . $path, $payload);
-    }
-
-    public function getTopSearchQueries()
-    {
-
-        $payload = [
-            "compute" => [
-                [
-                    "aggregation" => "count",
-                    "type" => "total"
-                ]
-            ],
-            "group_by" => [
-                [
-                    "facet" => "@http.url_details.path",
-                    "limit" => 5
-                ]
-            ],
-            "filter" => [
-                "from" => "now-24h",
-                "to" => "now",
-                "query" => "service:my-laravel-app"
-            ]
-        ];
-
-
-        $response = $this->request('post', '/api/v2/logs/analytics/aggregate', 
-            $payload
-        );
-
-        if (!$response->successful()) {
-            return ['error' => 'Failed to fetch top queries', 'details' => $response->json()];
-        }
-        $a = $response->json();
-        return $a;
-
-        $buckets = $response->json()['data']['buckets'] ?? [];
-        $totalCount = array_sum(array_column($buckets, 'count'));
-        $topQueries = [];
-
-        foreach ($buckets as $bucket) {
-            $topQueries[] = [
-                'query' => $bucket['by']['@http.url_details.path'],
-                'count' => $bucket['count'],
-                // 'percentage' => $totalCount > 0 ? round(($bucket['count'] / $totalCount) * 100, 2) : 0,
-            ];
-        }
-
-        return $topQueries;
     }
 
     public function getAverageRequestTime()
