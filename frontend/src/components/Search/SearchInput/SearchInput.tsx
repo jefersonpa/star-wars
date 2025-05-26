@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import './style.css';
 import { searchByOptions, setSearchBy, setSearchTerm } from '../../../store/sharedSlice';
 import { useTypedSelector } from '../../../store/store';
-import { useGetStarWarsPeopleQuery } from '../../../services/generatedCodeApi';
+import { useGetStarWarsPeopleQuery, useGetStarWarsMoviesQuery } from '../../../services/generatedCodeApi';
 import { useState } from 'react';
 const SearchInput = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,12 @@ const SearchInput = () => {
     { name: searchTerm },
     {
       skip: searchTerm === '' || searchBy !== searchByOptions.people,
+    },
+  );
+  const { isFetching: moviesIsFetching } = useGetStarWarsMoviesQuery(
+    { name: searchTerm },
+    {
+      skip: searchTerm === '' || searchBy !== searchByOptions.movies,
     },
   );
 
@@ -27,11 +33,13 @@ const SearchInput = () => {
       <span className="search-input__question-text">What are you searching for?</span>
       <div className="search-input__search-input-container">
         <div
+          data-testid="search-combo-people"
           className={`search-input__ellipse ${searchBy == searchByOptions.people ? 'search-input__ellipse-selected' : ''}`}
           onClick={() => handleComboClick(searchByOptions.people)}
         ></div>
         <span className="search-input__people people-gap">People</span>
         <div
+          data-testid="search-combo-movies"
           className={`search-input__ellipse ${searchBy == searchByOptions.movies ? 'search-input__ellipse-selected' : ''}`}
           onClick={() => handleComboClick(searchByOptions.movies)}
         ></div>
@@ -40,6 +48,7 @@ const SearchInput = () => {
       <input
         type="search"
         className="search-input__input input-text"
+        data-testid="search-input"
         placeholder={
           searchBy == searchByOptions.people
             ? 'e.g. Chewbacca, Yoda, Boba Fett'
@@ -50,10 +59,12 @@ const SearchInput = () => {
       ></input>
       <button
         onClick={handleSearch}
-        disabled={isFetching == true || searchValue == ''}
-        className={`search-input__search-button ${isFetching == true || searchValue == '' ? 'search-input__search-button-disabled' : ''}`}
+        disabled={isFetching == true || moviesIsFetching == true || searchValue == ''}
+        className={`search-input__search-button ${isFetching == true || moviesIsFetching == true || searchValue == '' ? 'search-input__search-button-disabled' : ''}`}
       >
-        <span className="search-input__search-button-text">{isFetching ? 'SEARCHING...' : 'SEARCH'}</span>
+        <span className="search-input__search-button-text">
+          {isFetching || moviesIsFetching ? 'SEARCHING...' : 'SEARCH'}
+        </span>
       </button>
     </div>
   );
