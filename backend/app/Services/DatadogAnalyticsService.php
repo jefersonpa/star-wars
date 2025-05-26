@@ -39,7 +39,7 @@ class DatadogAnalyticsService
     public function getAverageRequestTime()
     {
         $response = $this->request('get', '/api/v1/query', [
-            'query' => 'avg:trace.web.request.duration{service:my-laravel-app}',
+            'query' => 'avg:trace.laravel.request.duration{service:my-laravel-app}',
             'from' => time() - (24 * 3600),
             'to' => time(),
         ]);
@@ -61,7 +61,7 @@ class DatadogAnalyticsService
     public function getApiCallCount()
     {
         $response = $this->request('get', '/api/v1/query', [
-            'query' => 'sum:trace.web.request.hits{service:my-laravel-app}',
+            'query' => 'sum:trace.laravel.request.hits{service:my-laravel-app}',
             'from' => time() - (24 * 3600),
             'to' => time(),
         ]);
