@@ -9,8 +9,15 @@ services:
       DB_DATABASE: laravel_star_wars
       DB_USERNAME: user
       DB_PASSWORD: password
+      DD_AGENT_HOST: datadog-agent
+      DD_TRACE_AGENT_PORT: 8126
+      DD_TRACE_ENABLED: true
+      DD_SERVICE: my-laravel-app
+      DD_ENV: local
+      DD_VERSION: 1.0.0
     depends_on:
       - db
+      - datadog-agent
     command: >
       sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0"
     networks:
@@ -19,22 +26,43 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app/backend
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   tty: true
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend:/app/frontend
-  #     - /app/frontend/node_modules
-  #   environment:
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app
+      - ./datadog.ini:/usr/local/etc/php/conf.d/datadog.ini
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - app
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:latest
+    environment:
+      - DD_API_KEY=7fb3d55a3d13528bab7b08b186ac9ff1
+      - DD_SITE=us5.datadoghq.com
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_TRACE_ENABLED=true
+      - DD_TRACE_DEBUG=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8126:8126/tcp"
+      # - "8125:8125"
+    networks:
+      - app
   db:
     image: mysql:5.7.22
     ports:

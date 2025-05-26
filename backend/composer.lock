@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93d7b4685bbe9d83275d54599bc27fec",
+    "content-hash": "735c79f3d04a5207afbfb2957191b0f9",
     "packages": [
         {
             "name": "brick/math",
@@ -215,6 +215,111 @@
                 }
             ],
             "time": "2025-02-28T06:25:02+00:00"
+        },
+        {
+            "name": "datadog/dd-trace",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DataDog/dd-trace-php",
+                "reference": "1830b5a828298fd29b9421ecff91ac2741a3efad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DataDog/dd-trace-php/zipball/1830b5a828298fd29b9421ecff91ac2741a3efad",
+                "reference": "1830b5a828298fd29b9421ecff91ac2741a3efad",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^7.0 || ^8.0.0"
+            },
+            "require-dev": {
+                "ext-posix": "*",
+                "g1a/composer-test-scenarios": "~3.0",
+                "mockery/mockery": "*",
+                "phpunit/phpunit": "<10",
+                "squizlabs/php_codesniffer": "^3.3.0",
+                "symfony/process": "<5"
+            },
+            "type": "library",
+            "extra": {
+                "scenarios": {
+                    "openai": {
+                        "require": {
+                            "openai-php/client": "@stable"
+                        },
+                        "scenario-options": {
+                            "create-lockfile": false
+                        }
+                    },
+                    "opentracing10": {
+                        "require": {
+                            "opentracing/opentracing": "^1.0"
+                        },
+                        "scenario-options": {
+                            "create-lockfile": false
+                        }
+                    },
+                    "opentelemetry1": {
+                        "require": {
+                            "open-telemetry/sdk": "@stable",
+                            "open-telemetry/extension-propagator-b3": "@stable",
+                            "open-telemetry/opentelemetry-logger-monolog": "@stable"
+                        },
+                        "scenario-options": {
+                            "create-lockfile": false
+                        }
+                    },
+                    "opentracing_beta5": {
+                        "require": {
+                            "opentracing/opentracing": "1.0.0-beta5"
+                        },
+                        "scenario-options": {
+                            "create-lockfile": false
+                        }
+                    },
+                    "opentracing_beta6": {
+                        "require": {
+                            "opentracing/opentracing": "1.0.0-beta6"
+                        },
+                        "scenario-options": {
+                            "create-lockfile": false
+                        }
+                    }
+                },
+                "scenario-options": {
+                    "dependency-licenses": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DDTrace\\": "./src/api/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "José Carlos Chávez",
+                    "email": "jcchavezs@gmail.com"
+                },
+                {
+                    "name": "DataDog",
+                    "email": "dev@datadoghq.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP APM Client",
+            "keywords": [
+                "DataDog",
+                "php",
+                "tracing"
+            ],
+            "time": "2025-05-09T01:10:47+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2728,6 +2833,55 @@
                 }
             ],
             "time": "2025-05-08T08:14:37+00:00"
+        },
+        {
+            "name": "opentracing/opentracing",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opentracing/opentracing-php.git",
+                "reference": "cd60bd1fb2a25280600bc74c7f9e0c13881a9116"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opentracing/opentracing-php/zipball/cd60bd1fb2a25280600bc74c7f9e0c13881a9116",
+                "reference": "cd60bd1fb2a25280600bc74c7f9e0c13881a9116",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "~0.12",
+                "phpunit/phpunit": "^7.0 || ^9.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/OpenTracing/Tags.php",
+                    "src/OpenTracing/Formats.php"
+                ],
+                "psr-4": {
+                    "OpenTracing\\": "src/OpenTracing/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "José Carlos Chávez",
+                    "email": "jcchavezs@gmail.com"
+                }
+            ],
+            "description": "OpenTracing API for PHP",
+            "support": {
+                "issues": "https://github.com/opentracing/opentracing-php/issues",
+                "source": "https://github.com/opentracing/opentracing-php/tree/1.0.2"
+            },
+            "time": "2022-01-27T19:59:21+00:00"
         },
         {
             "name": "phpoption/phpoption",
