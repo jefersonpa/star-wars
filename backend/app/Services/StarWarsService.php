@@ -4,6 +4,9 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use DDTrace\Tag;
+use DDTrace;
+use OpenTracing\GlobalTracer;
 
 class StarWarsService
 {
@@ -11,7 +14,29 @@ class StarWarsService
 
     protected function request(string $path, array $query = []): Response
     {
-        return Http::get("{$this->baseUrl}{$path}", $query);
+        $tracer = GlobalTracer::get();
+        $scope = $tracer->startActiveSpan("starwars.request");
+        $span = $scope->getSpan();
+
+        try {
+            $span->setTag("service.name", "my-laravel-app");
+            $span->setTag("resource.name", $path);
+            $span->setTag("http.url", "{$this->baseUrl}{$path}");
+
+            if (!empty($query)) {
+                $span->setTag("http.query", http_build_query($query));
+                foreach ($query as $key => $value) {
+                    if (is_scalar($value)) {
+                        $span->setTag("http.query.param.{$key}", (string)$value);
+                    }
+                }
+            }
+
+            return Http::get("{$this->baseUrl}{$path}", $query);
+        } finally {
+            $span->finish();
+            $scope->close();
+        }
     }
 
     public function searchPeople(string $name): ?array

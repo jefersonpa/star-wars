@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'datadog' => [
+        'api_key' => env('DATADOG_API_KEY'),
+        'app_key' => env('DATADOG_APP_KEY'),
+        'site' => env('DATADOG_SITE', 'datadoghq.com'),
+    ],
 ];
