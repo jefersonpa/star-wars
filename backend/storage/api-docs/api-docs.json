@@ -3,9 +3,6 @@
     "info": {
         "title": "Star Wars API Documentation",
         "description": "API for accessing Star Wars data (People, Films, etc.)",
-        "contact": {
-            "email": "your@email.com"
-        },
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -19,6 +16,58 @@
         }
     ],
     "paths": {
+        "/analytics": {
+            "get": {
+                "operationId": "be3cd15e374cf0aca93d6eb3a3fe9941",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "average_request_timing": {
+                                            "properties": {
+                                                "average_duration_seconds": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 0.002587865029151241
+                                                },
+                                                "average_duration_ms": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 2.59
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "count_of_calls": {
+                                            "properties": {
+                                                "api_call_count": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "count_of_errors": {
+                                            "properties": {
+                                                "api_call_count_errors": {
+                                                    "type": "integer",
+                                                    "example": 0
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/star-wars/people": {
             "get": {
                 "operationId": "3f10afef3eefadf2aa703b21139b904a",
