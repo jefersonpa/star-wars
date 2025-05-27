@@ -29,53 +29,61 @@ const Results = () => {
   };
 
   const renderPeopleResults = () => {
-    return peopleData && peopleData.length > 0 ? (
-      peopleData?.map((item) => (
-        <div key={item.uid} className="results__item">
-          <div className="results__item-container">
-            <span className="results__item-name">{item.name}</span>
-            <button className={'results__item-see-details-button'} onClick={() => handleClick(item.uid)}>
-              <span className="results__item-see-details-button-text">SEE DETAILS</span>
-            </button>
-          </div>
-          <div className="results__item-divider"></div>
+    if (peopleIsFetching) {
+      return (
+        <div className="results__center-element">
+          <span className="results__no-results">Searching...</span>
         </div>
-      ))
-    ) : peopleIsFetching ? (
-      <div className="results__center-element">
-        <span className="results__no-results">Searching...</span>
+      );
+    }
+    if (!peopleData || peopleData.length == 0) {
+      return (
+        <div className="results__center-element">
+          <span className="results__no-results">There are zero matches.</span>
+          <span className="results__no-results">Use the form to search for People or Movies.</span>
+        </div>
+      );
+    }
+    return peopleData?.map((item) => (
+      <div key={item.uid} className="results__item">
+        <div className="results__item-container">
+          <span className="results__item-name">{item.name}</span>
+          <button className={'results__item-see-details-button'} onClick={() => handleClick(item.uid)}>
+            <span className="results__item-see-details-button-text">SEE DETAILS</span>
+          </button>
+        </div>
+        <div className="results__item-divider"></div>
       </div>
-    ) : (
-      <div className="results__center-element">
-        <span className="results__no-results">There are zero matches.</span>
-        <span className="results__no-results">Use the form to search for People or Movies.</span>
-      </div>
-    );
+    ));
   };
 
   const renderMoviesResults = () => {
-    return moviesData && moviesData.length > 0 ? (
-      moviesData?.map((item) => (
-        <div key={item.uid} className="results__item">
-          <div className="results__item-container">
-            <span className="results__item-name">{item.title}</span>
-            <button className={'results__item-see-details-button'} onClick={() => handleClick(item.uid)}>
-              <span className="results__item-see-details-button-text">SEE DETAILS</span>
-            </button>
-          </div>
-          <div className="results__item-divider"></div>
+    if (moviesIsFetching) {
+      return (
+        <div className="results__center-element">
+          <span className="results__no-results">Searching...</span>
         </div>
-      ))
-    ) : moviesIsFetching ? (
-      <div className="results__center-element">
-        <span className="results__no-results">Searching...</span>
+      );
+    }
+    if (!moviesData || moviesData.length == 0) {
+      return (
+        <div className="results__center-element">
+          <span className="results__no-results">There are zero matches.</span>
+          <span className="results__no-results">Use the form to search for People or Movies.</span>
+        </div>
+      );
+    }
+    return moviesData?.map((item) => (
+      <div key={item.uid} className="results__item">
+        <div className="results__item-container">
+          <span className="results__item-name">{item.title}</span>
+          <button className={'results__item-see-details-button'} onClick={() => handleClick(item.uid)}>
+            <span className="results__item-see-details-button-text">SEE DETAILS</span>
+          </button>
+        </div>
+        <div className="results__item-divider"></div>
       </div>
-    ) : (
-      <div className="results__center-element">
-        <span className="results__no-results">There are zero matches.</span>
-        <span className="results__no-results">Use the form to search for People or Movies.</span>
-      </div>
-    );
+    ));
   };
 
   return (

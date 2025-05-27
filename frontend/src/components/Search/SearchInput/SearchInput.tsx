@@ -16,7 +16,7 @@ const SearchInput = () => {
     },
   );
   const { isFetching: moviesIsFetching } = useGetStarWarsMoviesQuery(
-    { name: searchTerm },
+    { title: searchTerm },
     {
       skip: searchTerm === '' || searchBy !== searchByOptions.movies,
     },
